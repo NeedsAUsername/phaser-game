@@ -68,6 +68,7 @@ class Scene1 extends Phaser.Scene {
     console.log('player', this.player)
     console.log('ground', this.ground)
     console.log('diamond', this.diamonds)
+    console.log('scoreText', this.scoreText)
   }
 
   update() {
@@ -96,8 +97,11 @@ class Scene1 extends Phaser.Scene {
     }
 
     if (this.score >= 100) {
-      alert('You Win!')
-      this.scene.restart()
+      this.winText = this.add.text(300, 16, 'You Win!', {fontSize: '64px', fill: '#000'}) 
+      this.scene.pause()
+      setTimeout(() => {
+        this.scene.restart()       
+      }, 1000);
     }
   }
 
