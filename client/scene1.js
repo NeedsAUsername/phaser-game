@@ -75,25 +75,24 @@ class Scene1 extends Phaser.Scene {
     this.physics.collide(this.diamonds, this.platforms)
     this.physics.overlap(this.player, this.diamonds, this.collectDiamond, null, this) 
 
+    if (this.cursors.up.isDown && this.player.body.touching.down) {
+      this.player.jumping = true 
+      this.player.body.velocity.y = -350 
+    } else {
+      this.player.body.touching.down ? this.player.jumping = false : this.player.body.velocity.y += 5
+    } 
+
     if (this.cursors.left.isDown) { 
-      this.player.anims.play('left', true) 
       this.player.direction = 'left'
+      this.player.jumping ? this.player.setFrame(1) : this.player.anims.play('left', true) 
       this.player.body.velocity.x = -150
     } else if (this.cursors.right.isDown) {
-      this.player.anims.play('right', true)
       this.player.direction = 'right'
+      this.player.jumping ? this.player.setFrame(2) : this.player.anims.play('right', true)
       this.player.body.velocity.x = 150
     } else {
       this.player.body.velocity.x = 0
       this.player.direction === 'left' ? this.player.setFrame(1) : this.player.setFrame(2)
-    }
-    if (this.cursors.up.isDown && this.player.body.touching.down) {
-      if (this.player.body.velocity.x === 160) {
-        this.player.body.velocity.y = -600
-      }
-      this.player.body.velocity.y = -350 
-    } else if (!this.player.body.touching.down) {
-      this.player.body.velocity.y += 5
     }
 
     if (this.score >= 100) {
