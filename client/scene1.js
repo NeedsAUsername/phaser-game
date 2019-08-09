@@ -17,21 +17,21 @@ class Scene1 extends Phaser.Scene {
   create() {
     this.anims.create({
       key: 'left', 
-      frames: this.anims.generateFrameNumbers('player', {start: 0, end: 1}), 
-      frameRate: 1, 
+      frames: this.anims.generateFrameNumbers('woof', {start: 0, end: 1}), 
+      frameRate: 10, 
       repeat: -1
     })
     this.anims.create({
       key: 'right', 
-      frames: this.anims.generateFrameNumbers('player', {start: 2, end: 3}), 
-      frameRate: 1, 
+      frames: this.anims.generateFrameNumbers('woof', {start: 2, end: 3}), 
+      frameRate: 10, 
       repeat: -1
     })
 
     this.worldHeight = this.game.config.height
     this.sky = this.add.image(400, 300, 'SKY') 
 
-    this.player = this.add.sprite(32, 300, 'woof')
+    this.player = this.add.sprite(32, 300, 'woof', 2)
     this.physics.add.existing(this.player)
     this.player.body.bounce.y = 0.2 
     this.player.body.collideWorldBounds = true  
@@ -65,23 +65,28 @@ class Scene1 extends Phaser.Scene {
     this.scoreText = this.add.text(16, 16, 'Score: ' + this.score, {fontSize: '32px', fill: '#000'}) 
     this.cursors = this.input.keyboard.createCursorKeys()
 
-    // console.log('player', this.player)
-    // console.log('ground', this.ground)
-    // console.log('diamond', this.diamonds)
+    console.log('player', this.player)
+    console.log('ground', this.ground)
+    console.log('diamond', this.diamonds)
   }
 
   update() {
     this.physics.collide(this.player, this.platforms)
     this.physics.collide(this.diamonds, this.platforms)
     this.physics.overlap(this.player, this.diamonds, this.collectDiamond, null, this) 
-    this.player.body.velocity.x = 0
+
     if (this.cursors.left.isDown) { 
-      // this.player.anims.play('left')
+      this.player.anims.play('left', true) 
+      this.player.direction = 'left'
       this.player.body.velocity.x = -150
     } else if (this.cursors.right.isDown) {
-      // this.player.anims.play('right')
+      this.player.anims.play('right', true)
+      this.player.direction = 'right'
       this.player.body.velocity.x = 150
-    } 
+    } else {
+      this.player.body.velocity.x = 0
+      this.player.direction === 'left' ? this.player.setFrame(1) : this.player.setFrame(2)
+    }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       if (this.player.body.velocity.x === 160) {
         this.player.body.velocity.y = -600
