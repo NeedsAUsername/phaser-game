@@ -65,9 +65,9 @@ class Scene1 extends Phaser.Scene {
     this.scoreText = this.add.text(16, 16, 'Score: ' + this.score, {fontSize: '32px', fill: '#000'}) 
     this.cursors = this.input.keyboard.createCursorKeys()
 
-    console.log('player', this.player)
-    console.log('ground', this.ground)
-    console.log('diamond', this.diamonds)
+    // console.log('player', this.player)
+    // console.log('ground', this.ground)
+    // console.log('diamond', this.diamonds)
   }
 
   update() {
@@ -93,7 +93,7 @@ class Scene1 extends Phaser.Scene {
 
     if (this.score >= 100) {
       alert('You Win!')
-      this.score = 0
+      this.scene.restart()
     }
   }
 
