@@ -86,11 +86,11 @@ class Scene1 extends Phaser.Scene {
     if (this.cursors.left.isDown) { 
       this.player.direction = 'left'
       this.player.jumping ? this.player.setFrame(1) : this.player.anims.play('left', true) 
-      this.player.body.velocity.x = -150
+      this.player.body.velocity.x = -200
     } else if (this.cursors.right.isDown) {
       this.player.direction = 'right'
       this.player.jumping ? this.player.setFrame(2) : this.player.anims.play('right', true)
-      this.player.body.velocity.x = 150
+      this.player.body.velocity.x = 200
     } else {
       this.player.body.velocity.x = 0
       this.player.direction === 'left' ? this.player.setFrame(1) : this.player.setFrame(2)
