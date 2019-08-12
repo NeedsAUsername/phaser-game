@@ -11,11 +11,13 @@ class Scene1 extends Phaser.Scene {
     this.load.image('SKY', 'assets/sky.png') 
     this.load.image('BACKGROUND', 'assets/maplestory_background.jpg')
     this.load.image('platform', 'assets/platform.png') 
+    this.load.spritesheet('platforms', 'assets/platforms1.png', {frameWidth: 80, frameHeight: 50})
     this.load.image('diamond', 'assets/diamond.png') 
     this.load.spritesheet('woof', 'assets/woof.png', {frameWidth: 32, frameHeight: 32})
   }
 
   create() {
+
     this.anims.create({
       key: 'left', 
       frames: this.anims.generateFrameNumbers('woof', {start: 0, end: 1}), 
@@ -42,16 +44,17 @@ class Scene1 extends Phaser.Scene {
     this.platforms = this.add.group() 
     this.platforms.enableBody = true 
 
-    this.ground = this.platforms.create(100, this.worldHeight - 32, 'platform') 
-    this.ground.width *= 4
-    this.ground.scale = 4
+    this.ground = this.add.tileSprite(this.worldWidth/2, this.worldHeight - 15, this.worldWidth, 35, 'platforms') 
     this.addImmovablePhysics(this.ground)
+    this.platforms.add(this.ground)
     
-    this.ledge = this.platforms.create(400, 400, 'platform') 
+
+    this.ledge = this.add.tileSprite(400, 470, 500, 35, 'platforms')
     this.addImmovablePhysics(this.ledge)
-    this.ledge2 = this.platforms.create(750, 300, 'platform')
+    this.platforms.add(this.ledge)
+    this.ledge2 = this.add.tileSprite(600, 350, 300, 35, 'platforms')
     this.addImmovablePhysics(this.ledge2)
-    
+    this.platforms.add(this.ledge2)    
 
     this.diamonds = this.add.group() 
     this.diamonds.enableBody = true  
