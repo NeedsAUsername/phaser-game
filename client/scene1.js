@@ -40,7 +40,10 @@ class Scene1 extends Phaser.Scene {
     this.player = this.add.sprite(32, 300, 'woof', 2)
     this.physics.add.existing(this.player)
     this.player.body.bounce.y = 0.2 
-    this.player.body.collideWorldBounds = true  
+    this.player.body.collideWorldBounds = true 
+    this.player.maxHealth = 100 
+    this.player.health = 100
+    this.player.healthText = this.add.text(16, 50, 'Health: ' + this.player.health, {fontSize: '32px', fill: '#000'})
 
     this.platforms = this.add.group() 
     this.platforms.enableBody = true 
@@ -77,7 +80,8 @@ class Scene1 extends Phaser.Scene {
       snail = this.enemies.create(300 + i*100, platform.y - 35, 'snail') 
       this.physics.add.existing(snail) 
       snail.body.collideWorldBounds = true
-      snail.direction = 'left'
+      i % 2 == 0 ? snail.direction = 'left' : snail.direction = 'right'
+      snail.attack = 20 
     }
 
     this.score = 0
@@ -97,6 +101,7 @@ class Scene1 extends Phaser.Scene {
     this.physics.collide(this.diamonds, this.platforms)
     this.physics.collide(this.enemies, this.platforms)
     this.physics.overlap(this.player, this.diamonds, this.collectDiamond, null, this) 
+    this.physics.overlap(this.player, this.enemies, this.takeDamageFromEnemy, null, this)
 
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.jumping = true 
@@ -114,7 +119,7 @@ class Scene1 extends Phaser.Scene {
       this.player.jumping ? this.player.setFrame(2) : this.player.anims.play('right', true)
       this.player.body.velocity.x = 200
     } else {
-      this.player.body.velocity.x = 0
+      if (!this.player.movementLocked) { this.player.body.velocity.x = 0 }
       this.player.direction === 'left' ? this.player.setFrame(1) : this.player.setFrame(2)
     }
 
@@ -128,7 +133,14 @@ class Scene1 extends Phaser.Scene {
       this.scene.pause()
       setTimeout(() => {
         this.scene.restart()       
-      }, 1000);
+      }, 1000)
+    }
+    if (this.player.health <= 0) {
+      this.loseText = this.add.text(300, 16, 'You Died', {fontSize: '64px', fill: '#000'})
+      this.scene.pause() 
+      setTimeout(() => {
+        this.scene.restart() 
+      }, 1000)
     }
   }
 
@@ -142,6 +154,24 @@ class Scene1 extends Phaser.Scene {
     diamond.destroy()
     this.score += 10 
     this.scoreText.text = 'Score: ' + this.score 
+  }
+
+  takeDamageFromEnemy(player, enemy) {
+    if (!player.immune) {
+      let directionFactor = player.direction === 'left' ? 1 : -1
+      player.movementLocked = true 
+      setTimeout(() => {
+        player.movementLocked = false
+      }, 500) 
+      player.immune = true 
+      setTimeout(() => {
+        player.immune = false
+      }, 2000)
+      player.body.velocity.x = 100 * directionFactor 
+      player.body.velocity.y = -100
+      player.health -= enemy.attack
+      player.healthText.text = 'Health: ' + player.health
+    }
   }
 
   paceCharacter(character, {speed, distance}) {
