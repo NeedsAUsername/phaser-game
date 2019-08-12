@@ -70,10 +70,15 @@ class Scene1 extends Phaser.Scene {
     }
 
     this.enemies = this.add.group() 
-    this.snail = this.enemies.create(500, this.platforms.children.entries[0].y - 40, 'snail') 
-    this.physics.add.existing(this.snail) 
-    this.snail.body.collideWorldBounds = true
-    this.snail.direction = 'left'
+
+    for (let i = 0; i < 3; i++) {
+      let snail = this['snail' + 1]
+      let platform = this.platforms.children.entries[i] 
+      snail = this.enemies.create(300 + i*100, platform.y - 35, 'snail') 
+      this.physics.add.existing(snail) 
+      snail.body.collideWorldBounds = true
+      snail.direction = 'left'
+    }
 
     this.score = 0
     this.scoreText = this.add.text(16, 16, 'Score: ' + this.score, {fontSize: '32px', fill: '#000'}) 
@@ -113,18 +118,9 @@ class Scene1 extends Phaser.Scene {
       this.player.direction === 'left' ? this.player.setFrame(1) : this.player.setFrame(2)
     }
 
-
-    this.paceCharacter(this.snail, {speed: 40, distance: 200})
-    // const directionFactor = this.snail.direction === 'left' ? -1 : 1 
-    // this.snail.body.velocity.x = 40 * directionFactor 
-    // this.snail.distanceTraveled -= directionFactor 
-    // if (this.snail.distanceTraveled >= 200) {
-    //   this.snail.direction = 'right' 
-    // } 
-    // if (this.snail.distanceTraveled < -200) {
-    //   this.snail.direction = 'left'
-    // }
-
+    this.enemies.children.entries.forEach(enemy => {
+      this.paceCharacter(enemy, {speed: 40, distance: 200})
+    })
     
 
     if (this.score >= 100) {
