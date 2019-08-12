@@ -80,7 +80,12 @@ class Scene1 extends Phaser.Scene {
       snail = this.enemies.create(300 + i*100, platform.y - 35, 'snail') 
       this.physics.add.existing(snail) 
       snail.body.collideWorldBounds = true
-      i % 2 == 0 ? snail.direction = 'left' : snail.direction = 'right'
+      if (i % 2 == 0) {
+        snail.direction = 'left'
+      } else {
+        snail.direction = 'right' 
+        snail.flipX = true 
+      }
       snail.attack = 20 
     }
 
