@@ -9,6 +9,7 @@ class Scene1 extends Phaser.Scene {
 
   preload() {
     this.load.image('SKY', 'assets/sky.png') 
+    this.load.image('BACKGROUND', 'assets/maplestory_background.jpg')
     this.load.image('platform', 'assets/platform.png') 
     this.load.image('diamond', 'assets/diamond.png') 
     this.load.spritesheet('woof', 'assets/woof.png', {frameWidth: 32, frameHeight: 32})
@@ -29,7 +30,9 @@ class Scene1 extends Phaser.Scene {
     })
 
     this.worldHeight = this.game.config.height
-    this.sky = this.add.image(400, 300, 'SKY') 
+    this.worldWidth = this.game.config.width 
+
+    this.background = this.add.image(this.worldWidth /2, this.worldHeight /2, 'BACKGROUND') 
 
     this.player = this.add.sprite(32, 300, 'woof', 2)
     this.physics.add.existing(this.player)
