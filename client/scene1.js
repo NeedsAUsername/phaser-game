@@ -12,9 +12,9 @@ class Scene1 extends Phaser.Scene {
     this.load.image('BACKGROUND', 'assets/maplestory_background.jpg')
     this.load.image('platform', 'assets/platform.png') 
     this.load.image('diamond', 'assets/diamond.png') 
-    this.load.spritesheet('snail', 'assets/snail.png', {frameWidth: 50, frameHeight: 35})
+    this.load.spritesheet('snail', 'assets/snail.png', {frameWidth: 40, frameHeight: 35})
     this.load.spritesheet('platforms', 'assets/platforms1.png', {frameWidth: 80, frameHeight: 50})
-    this.load.spritesheet('woof', 'assets/woof.png', {frameWidth: 32, frameHeight: 32})
+    this.load.spritesheet('woof', 'assets/woof.png', {frameWidth: 32, frameHeight: 32, centerY: 30})
   }
 
   create() {
@@ -75,9 +75,10 @@ class Scene1 extends Phaser.Scene {
     this.enemies = this.add.group() 
 
     for (let i = 0; i < 3; i++) {
-      let snail = this['snail' + 1]
+      let snail = this['snail' + i]
       let platform = this.platforms.children.entries[i] 
       snail = this.enemies.create(300 + i*100, platform.y - 35, 'snail') 
+      snail.setRandomPosition(200, 200, 600, 300)
       this.physics.add.existing(snail) 
       snail.body.collideWorldBounds = true
       if (i % 2 == 0) {
@@ -98,7 +99,7 @@ class Scene1 extends Phaser.Scene {
     console.log('ground', this.ground)
     console.log('diamond', this.diamonds)
     console.log('scoreText', this.scoreText)
-    console.log('snail', this.snail)
+    console.log('snail', this.enemies)
   }
 
   update() {
