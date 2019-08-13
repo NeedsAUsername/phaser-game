@@ -43,7 +43,9 @@ class Scene1 extends Phaser.Scene {
     this.player.body.collideWorldBounds = true 
     this.player.maxHealth = 100 
     this.player.health = 100
-    this.player.healthText = this.add.text(16, 50, 'Health: ' + this.player.health, {fontSize: '32px', fill: '#000'})
+    this.player.healthText = this.add.text(16, 50, 'Health: ' + this.player.health + '/' + this.player.maxHealth, {fontSize: '32px', fill: '#000'})  
+    this.player.healthBar = this.add.rectangle(20, 80, 300, 20, '#fff')
+    this.player.healthBar.setOrigin(0, 0)
 
     this.platforms = this.add.group() 
     this.platforms.enableBody = true 
@@ -176,7 +178,8 @@ class Scene1 extends Phaser.Scene {
       player.body.velocity.x = 100 * directionFactor 
       player.body.velocity.y = -100
       player.health -= enemy.attack
-      player.healthText.text = 'Health: ' + player.health
+      player.healthText.text = 'Health: ' + player.health + '/' + player.maxHealth 
+      player.healthBar.width = (this.player.health / this.player.maxHealth) * 300
     }
   }
 
